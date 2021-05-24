@@ -90,11 +90,6 @@ class January(val pos: Int) : Fragment(), CommunicationAdapterWeek {
         adapterListDay.notifyDataSetChanged()
     }
 
-    public fun reload(){
-        adapterWeek.notifyDataSetChanged()
-        adapterListDay.notifyDataSetChanged()
-    }
-
     private fun makeDayMatchesWeek() {
         datesByMonthUseForAdapter.clear()
         for (i in 0 until listWeek.size) {
@@ -169,6 +164,12 @@ class January(val pos: Int) : Fragment(), CommunicationAdapterWeek {
                 return HandingDate.yearGlobal
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adapterWeek.notifyDataSetChanged()
+        adapterListDay.notifyDataSetChanged()
     }
 
 }

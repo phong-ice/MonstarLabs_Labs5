@@ -60,11 +60,11 @@ class MainActivity : AppCompatActivity() {
                     else -> binding.tvMonth.text = "December"
                 }
                 binding.tvTextYear.text = getYear(position).toString()
-                var january = (binding.viewpager2.adapter as PagerAdapter).instantiateItem(
-                    binding.viewpager2,
-                    position
-                ) as January
-                january.reload()
+//                var january = (binding.viewpager2.adapter as PagerAdapter).instantiateItem(
+//                    binding.viewpager2,
+//                    position
+//                ) as January
+//                january.reload()
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
