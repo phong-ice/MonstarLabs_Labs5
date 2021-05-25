@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.viewpager.widget.ViewPager
 import com.example.monstarlabs_lab5.CommunicationAdapterWeek
 import com.example.monstarlabs_lab5.HandingDate
 import com.example.monstarlabs_lab5.HandingDate.sortListDateMatchesWeek
@@ -15,6 +16,7 @@ import com.example.monstarlabs_lab5.HandingDate.yearGlobal
 import com.example.monstarlabs_lab5.R
 import com.example.monstarlabs_lab5.adapter.AdapterListDay
 import com.example.monstarlabs_lab5.adapter.AdapterListWeek
+import com.example.monstarlabs_lab5.adapter.PagerAdapter
 import com.example.monstarlabs_lab5.databinding.FragmentJanuaryBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -51,7 +53,7 @@ class January(val pos: Int) : Fragment(), CommunicationAdapterWeek {
             getMonth(pos) < 10 -> "0${getMonth(pos)}"
             else -> "${getMonth(pos)}"
         }
-        Log.i("test123","$month - ${getYear(pos)}")
+        Log.i("test123", "$month - ${getYear(pos)}")
         datesByMonth = HandingDate.getDaysByMonth(month, dates)
         datesByMonthUseForAdapter = HandingDate.getDaysByMonth(month, dates)
         adapterWeek = AdapterListWeek(this, listWeek)
@@ -61,7 +63,7 @@ class January(val pos: Int) : Fragment(), CommunicationAdapterWeek {
         }
 
         makeDayMatchesWeek()
-        adapterListDay = AdapterListDay(datesByMonthUseForAdapter, month)
+        adapterListDay = AdapterListDay(datesByMonthUseForAdapter, month,callBackReloadFragment)
         binding.lvDay.apply {
             adapter = adapterListDay
             layoutManager = GridLayoutManager(requireContext(), 7)
@@ -88,6 +90,17 @@ class January(val pos: Int) : Fragment(), CommunicationAdapterWeek {
         makeDayMatchesWeek()
         adapterWeek.notifyDataSetChanged()
         adapterListDay.notifyDataSetChanged()
+        var viewPager2 = activity?.findViewById<ViewPager>(R.id.viewpager2)
+        var january = (viewPager2?.adapter as PagerAdapter).instantiateItem(
+            viewPager2,
+            pos - 1
+        ) as January
+        var january2 = (viewPager2?.adapter as PagerAdapter).instantiateItem(
+            viewPager2,
+            pos + 1
+        ) as January
+        january.reLoad()
+        january2.reLoad()
     }
 
     private fun makeDayMatchesWeek() {
@@ -120,9 +133,9 @@ class January(val pos: Int) : Fragment(), CommunicationAdapterWeek {
                 val range = pos - haftCount
                 return if (range > 12 - HandingDate.monthGlobal) {
                     val x = range + HandingDate.monthGlobal
-                    return when{
+                    return when {
                         x % 12 == 0 -> 12
-                        else ->x % 12
+                        else -> x % 12
                     }
                 } else {
                     HandingDate.monthGlobal + range
@@ -152,10 +165,10 @@ class January(val pos: Int) : Fragment(), CommunicationAdapterWeek {
                 val range = pos - haftCount
                 return if (range > 12 - HandingDate.monthGlobal) {
                     val x = range + HandingDate.monthGlobal
-                   return when{
-                       x % 12 == 0 -> yearGlobal + (x / 12) - 1
-                       else ->  yearGlobal + (x / 12)
-                   }
+                    return when {
+                        x % 12 == 0 -> yearGlobal + (x / 12) - 1
+                        else -> yearGlobal + (x / 12)
+                    }
                 } else {
                     yearGlobal
                 }
@@ -166,10 +179,23 @@ class January(val pos: Int) : Fragment(), CommunicationAdapterWeek {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    public fun reLoad() {
+        makeDayMatchesWeek()
         adapterWeek.notifyDataSetChanged()
         adapterListDay.notifyDataSetChanged()
     }
 
+    val callBackReloadFragment: () -> Unit = {
+        var viewPager2 = activity?.findViewById<ViewPager>(R.id.viewpager2)
+        var january = (viewPager2?.adapter as PagerAdapter).instantiateItem(
+            viewPager2,
+            pos - 1
+        ) as January
+        var january2 = (viewPager2?.adapter as PagerAdapter).instantiateItem(
+            viewPager2,
+            pos + 1
+        ) as January
+        january.reLoad()
+        january2.reLoad()
+    }
 }

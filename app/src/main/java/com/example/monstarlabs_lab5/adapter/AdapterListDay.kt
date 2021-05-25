@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.monstarlabs_lab5.CommunicationAdapterWeek
 import com.example.monstarlabs_lab5.HandingDate
+import com.example.monstarlabs_lab5.MainActivity
 import com.example.monstarlabs_lab5.R
 import com.example.monstarlabs_lab5.databinding.ItemDayNowBinding
 import com.example.monstarlabs_lab5.databinding.ItemDayOfOtherMonthBinding
@@ -15,7 +17,7 @@ import com.example.monstarlabs_lab5.databinding.ItemListDayBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AdapterListDay(var dates: MutableList<Date>, val month: String) :
+class AdapterListDay(var dates: MutableList<Date>, val month: String,val callback: () -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var pos: Int? = null
@@ -91,6 +93,7 @@ class AdapterListDay(var dates: MutableList<Date>, val month: String) :
                         HandingDate.dateFocus =
                             SimpleDateFormat("EEEE dd/MM/yyyy").format(dates[position])
                         notifyDataSetChanged()
+                        callback()
                     }
                 }
             }

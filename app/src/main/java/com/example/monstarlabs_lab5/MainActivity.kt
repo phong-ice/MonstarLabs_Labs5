@@ -60,11 +60,6 @@ class MainActivity : AppCompatActivity() {
                     else -> binding.tvMonth.text = "December"
                 }
                 binding.tvTextYear.text = getYear(position).toString()
-//                var january = (binding.viewpager2.adapter as PagerAdapter).instantiateItem(
-//                    binding.viewpager2,
-//                    position
-//                ) as January
-//                january.reload()
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
@@ -139,6 +134,14 @@ class MainActivity : AppCompatActivity() {
                 return HandingDate.yearGlobal
             }
         }
+    }
+
+    public fun onReLoad(pos:Int){
+        var january = (binding.viewpager2.adapter as PagerAdapter).instantiateItem(
+            binding.viewpager2,
+            pos
+        ) as January
+        january.reLoad()
     }
 
 }
